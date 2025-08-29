@@ -3,46 +3,48 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>hei, nice to meet you — iram.ee</title>
-  <meta name="description" content="hei — i'm Mari. welcome to my corner of the internet. see my projects." />
+  <title>hei — nice to meet you</title>
+  <meta name="description" content="hei — i'm Mari. welcome." />
   <link rel="canonical" href="https://iram.ee/" />
 
-  <!-- Open Graph (LinkedIn, Slack) -->
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="iram.ee" />
-  <meta property="og:title" content="hei, nice to meet you" />
-  <meta property="og:description" content="see my projects and what I'm building." />
-  <meta property="og:url" content="https://iram.ee/" />
-  <meta property="og:image" content="https://iram.ee/og.png" />
-  <meta property="og:image:alt" content="Site banner saying 'hei — nice to meet you'" />
-
-  <!-- Icons -->
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-
-  <!-- Fonts + CSS -->
+  <!-- Google Fonts: Pirata One -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Pirata+One&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#111418; --bg2:#1a1f25; --text:#e9eef3; --muted:#9aa6b2;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{color-scheme:dark}
+    body{
+      min-height:100dvh;
+      display:grid; grid-template-rows:1fr auto;
+      background: radial-gradient(1200px circle at 50% -200px, var(--bg2), var(--bg));
+      color:var(--text);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; /* swap to your Adobe font if you like */
+    }
+    /* you asked to remove outlines */
+    *:focus{ outline: none !important; }
+
+    main{ display:grid; place-items:center; padding:4rem 1.25rem; }
+    h1{
+      font-family: 'Pirata One', cursive;
+      font-size:clamp(2.8rem, 8vw, 6rem);
+      font-weight:700;
+      letter-spacing:.3px;
+      text-align:center;
+    }
+
+    footer{ text-align:center; padding:24px; color:var(--muted); }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <header class="header">
-      <h1>hei — nice to meet you</h1>
-      <p class="lead">i'm Mari. i like building tools and low-level things.</p>
-      <div class="actions">
-        <a class="btn" href="/projects/">see projects →</a>
-        <a class="btn" href="https://www.linkedin.com/in/marimiil/" target="_blank" rel="noopener">linkedin</a>
-      </div>
-    </header>
+  <main>
+    <h1>hei — nice to meet you</h1>
+  </main>
 
-    <!-- optional: a tiny note instead of project cards -->
-    <section class="section">
-      <p style="color:var(--muted);text-align:center">more projects coming soon.</p>
-    </section>
-
-    <p class="footer">© Mari • Paris</p>
-  </div>
+  <footer>made by Mari in Paris 2025</footer>
 </body>
 </html>
