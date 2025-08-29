@@ -14,21 +14,41 @@
 
   <style>
     :root{
-      --bg:#111418; --bg2:#1a1f25; --text:#e9eef3; --muted:#9aa6b2;
+      --bg:#111418; --bg2:#1a1f25; --text:#e9eef3; --muted:#9aa6b2; --accent:#ffc9e0;
     }
     *{box-sizing:border-box;margin:0;padding:0}
     html{color-scheme:dark}
     body{
       min-height:100dvh;
-      display:grid; grid-template-rows:1fr auto;
+      display:grid; grid-template-rows:auto 1fr auto;
       background: radial-gradient(1200px circle at 50% -200px, var(--bg2), var(--bg));
       color:var(--text);
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; /* swap to your Adobe font if you like */
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
     }
-    /* you asked to remove outlines */
+    /* remove outlines */
     *:focus{ outline: none !important; }
 
-    main{ display:grid; place-items:center; padding:4rem 1.25rem; }
+    nav {
+      padding: 2rem 1.25rem 0;
+      text-align: right;
+    }
+    
+    nav a {
+      color: var(--accent);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    
+    nav a:hover {
+      color: #fff;
+    }
+
+    main{ 
+      display:grid; 
+      place-items:center; 
+      padding:2rem 1.25rem; 
+    }
+    
     h1{
       font-family: 'Pirata One', cursive;
       font-size:clamp(2.8rem, 8vw, 6rem);
@@ -41,6 +61,10 @@
   </style>
 </head>
 <body>
+  <nav>
+    <a href="/projects/">projects</a>
+  </nav>
+  
   <main>
     <h1>hei — nice to meet you</h1>
   </main>

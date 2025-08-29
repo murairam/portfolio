@@ -3,202 +3,298 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Minishell – Custom Unix Shell | 42 School Project</title>
-  <meta name="description" content="Minishell is a custom Unix shell built in C as part of the 42 curriculum: lexer, parser, pipes, redirections, built-ins, signals, and robust error handling." />
-  <link rel="canonical" href="https://iram.ee/" />
-
-  <!-- Social cards -->
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="Minishell – Custom Unix Shell" />
-  <meta property="og:description" content="A from-scratch Unix shell in C with pipes, redirections, and built-ins." />
-  <meta property="og:url" content="https://iram.ee/" />
-  <meta property="og:image" content="https://iram.ee/og.png" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Minishell – Custom Unix Shell" />
-  <meta name="twitter:description" content="A from-scratch Unix shell in C with pipes, redirections, and built-ins." />
-  <meta name="twitter:image" content="https://iram.ee/og.png" />
-
-  <!-- Favicons (add these files later) -->
-  <link rel="icon" href="/favicon.ico" sizes="any" />
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-  <link rel="manifest" href="/site.webmanifest" />
-
-  <!-- Fonts -->
+  <title>Minishell — Custom Unix Shell | iram.ee</title>
+  <meta name="description" content="A custom Unix shell built in C with pipes, redirections, and built-ins." />
+  <link rel="canonical" href="https://iram.ee/projects/minishell/" />
+  
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Pirata+One&display=swap" rel="stylesheet">
+  
   <style>
-    :root {
-      --bg-0: #121212;
-      --bg-1: #1a1a1a;
-      --bg-2: #2d2d2d;
-      --text: #e9ecef;
-      --muted: #adb5bd;
-      --accent: #ffb3d1;
-      --border: #404040;
-      --ok: #90ee90;
+    :root{
+      --bg:#111418; --bg2:#1a1f25; --text:#e9eef3; --muted:#9aa6b2; --accent:#ffc9e0;
     }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { color-scheme: dark; }
-    body {
-      font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-      line-height: 1.6;
-      color: var(--text);
-      background: linear-gradient(135deg, var(--bg-1) 0%, var(--bg-2) 100%);
-      min-height: 100vh;
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{color-scheme:dark}
+    body{
+      min-height:100dvh;
+      display:grid; grid-template-rows:auto 1fr auto;
+      background: radial-gradient(1200px circle at 50% -200px, var(--bg2), var(--bg));
+      color:var(--text);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
     }
-    a { color: inherit; }
-    a:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+    /* remove outlines */
+    *:focus{ outline: none !important; }
 
-    h1, h2, h3, h4, h5, h6 { font-family: 'Pirata One', cursive; letter-spacing: 0.3px; }
-
-    .container { max-width: 1100px; margin: 0 auto; padding: 24px; }
-
-    .skip {
-      position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden;
-    }
-    .skip:focus { position: static; width: auto; height: auto; padding: 8px 12px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 8px; }
-
-    header.header {
-      text-align: center;
-      padding: 64px 16px 56px;
-      background: linear-gradient(135deg, var(--bg-2) 0%, var(--bg-1) 100%);
-      border-radius: 20px;
-      margin-bottom: 36px;
-      box-shadow: 0 10px 30px rgba(0,0,0,.5);
-      border: 1px solid var(--border);
-    }
-    .header h1 {
-      font-size: clamp(2.2rem, 4.5vw, 3.5rem);
-      margin-bottom: 8px;
-      background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
-      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
-      font-weight: 800;
-    }
-    .header p { font-size: 1.1rem; color: var(--muted); }
-
-    section.block {
-      background: var(--bg-2);
-      margin: 32px 0;
-      border-radius: 16px;
-      padding: 28px;
-      box-shadow: 0 10px 30px rgba(0,0,0,.3);
-      border: 1px solid var(--border);
-    }
-
-    .demo-placeholder {
-      background: var(--bg-1);
-      color: #00ff88;
-      padding: 24px;
-      border-radius: 12px;
+    nav {
+      padding: 2rem 1.25rem 0;
+      color: var(--muted);
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Courier New", monospace;
-      font-size: 14px;
-      line-height: 1.45;
-      margin: 16px 0;
+    }
+    nav a { 
+      color: var(--muted); 
+      text-decoration: none; 
+    }
+    nav a:hover { 
+      color: var(--accent); 
+    }
+
+    main{ padding:2rem 1.25rem; max-width: 900px; margin: 0 auto; }
+    
+    h1{
+      font-family: 'Pirata One', cursive;
+      font-size:clamp(2.2rem, 5vw, 4rem);
+      font-weight:700;
+      letter-spacing:.3px;
+      text-align:center;
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: var(--muted);
+      margin-bottom: 3rem;
+      font-size: 1.1rem;
+    }
+
+    .section {
+      margin-bottom: 3rem;
+    }
+
+    .section h2 {
+      font-family: 'Pirata One', cursive;
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      color: var(--accent);
+    }
+
+    .terminal {
+      background: #0a0a0a;
+      border: 1px solid rgba(154, 166, 178, 0.2);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1rem 0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Courier New", monospace;
+      font-size: 0.9rem;
+      line-height: 1.4;
       position: relative;
-      overflow: hidden;
-      border: 1px solid var(--border);
+      overflow-x: auto;
     }
-    .demo-placeholder::before {
+
+    .terminal::before {
       content: "● ● ●";
-      position: absolute; top: 10px; left: 16px; color: #ff5f56;
-      letter-spacing: 6px;
+      position: absolute;
+      top: 0.75rem;
+      left: 1rem;
+      color: #ff5f56;
+      letter-spacing: 4px;
+      font-size: 0.8rem;
     }
-    .terminal-content { margin-top: 22px; }
+
+    .terminal-content { margin-top: 1.5rem; }
     .prompt { color: var(--accent); }
     .command { color: #fff; }
-    .output { color: var(--ok); }
+    .output { color: #90ee90; }
 
     .features {
-      display: grid; gap: 22px;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      display: grid;
+      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      margin-top: 1.5rem;
     }
-    .feature-card {
-      background: var(--bg-2);
-      padding: 22px;
-      border-radius: 14px;
-      border: 1.5px solid var(--border);
-      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
-      box-shadow: 0 5px 15px rgba(0,0,0,.2);
-    }
-    .feature-card:hover { transform: translateY(-4px); border-color: var(--accent); box-shadow: 0 10px 24px rgba(255,179,209,.15); }
-    .feature-card h3 { font-size: 1.35rem; margin-bottom: 10px; color: var(--accent); }
 
-    .tech-grid {
-      display: grid; gap: 16px;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      margin-top: 14px;
+    .feature {
+      padding: 1.5rem;
+      border: 1px solid rgba(154, 166, 178, 0.1);
+      border-radius: 8px;
+      transition: all 0.2s ease;
     }
+
+    .feature:hover {
+      border-color: var(--accent);
+      background: rgba(255, 201, 224, 0.02);
+    }
+
+    .feature h3 {
+      font-family: 'Pirata One', cursive;
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+      color: var(--accent);
+    }
+
+    .feature p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .tech-list {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      margin-top: 1rem;
+    }
+
     .tech-item {
-      background: var(--bg-1);
-      padding: 16px;
-      border-radius: 10px;
-      border-left: 4px solid #d63384;
-      box-shadow: 0 3px 10px rgba(0,0,0,.05);
+      padding: 1rem;
+      border: 1px solid rgba(154, 166, 178, 0.1);
+      border-radius: 6px;
+      border-left: 3px solid var(--accent);
     }
 
-    .center { text-align: center; margin: 28px 0; }
+    .tech-item h4 {
+      color: #fff;
+      font-size: 1rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .tech-item p {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
 
     .btn {
       display: inline-block;
-      background: linear-gradient(135deg, var(--bg-1) 0%, var(--accent) 100%);
-      color: #fff; padding: 12px 22px; border-radius: 999px; text-decoration: none;
-      font-weight: 700; border: 1px solid var(--border); box-shadow: 0 5px 15px rgba(255,179,209,.2);
-      transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+      margin-top: 1rem;
+      transition: all 0.15s ease;
     }
-    .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255,179,209,.28); border-color: var(--accent); }
 
-    footer { padding: 20px 0 32px; color: var(--muted); text-align: center; }
-    footer a { text-decoration: underline; text-underline-offset: 2px; }
+    .btn:hover {
+      color: #fff;
+    }
 
-    @media (prefers-reduced-motion: reduce) {
-      * { scroll-behavior: auto !important; transition: none !important; }
+    .center { text-align: center; margin: 2rem 0; }
+
+    ul {
+      margin: 1rem 0;
+      padding-left: 1.5rem;
     }
-    .topnav{
-      display:flex; gap:10px; align-items:center;
-      margin:6px 0 16px; color:var(--muted);
+
+    li {
+      margin-bottom: 0.5rem;
+      color: var(--muted);
+      line-height: 1.5;
     }
-    .topnav a{ text-decoration:underline; }
-    .topnav a:hover{ color:#fff; }
+
+    strong { color: var(--accent); }
+
+    .demo-note {
+      text-align: center;
+      margin-top: 1rem;
+      color: var(--muted);
+      font-style: italic;
+      font-size: 0.9rem;
+    }
+
+    footer{ text-align:center; padding:24px; color:var(--muted); }
   </style>
-
-  <!-- Minimal structured data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "SoftwareSourceCode",
-    "name": "Minishell",
-    "programmingLanguage": "C",
-    "codeRepository": "https://github.com/murairam/minishell",
-    "url": "https://iram.ee/",
-    "license": "https://opensource.org/license/mit"
-  }
-  </script>
 </head>
 <body>
-  <a href="#main" class="skip">Skip to content</a>
-  <div class="container">
-        <nav class="topnav">
-      <a href="/">← home</a>
-      <span aria-hidden="true">•</span>
-      <a href="/projects/">projects</a>
-      <span aria-hidden="true">•</span>
-      <span>minishell</span>
-    </nav>
-    <header class="header">
-      <h1>Minishell</h1>
-      <p>A custom Unix shell implementation built from scratch in C.</p>
-    </header>
+  <nav><a href="/">home</a> → <a href="/projects/">projects</a> → minishell</nav>
+  
+  <main>
+    <h1>Minishell</h1>
+    <p class="subtitle">A custom Unix shell implementation built from scratch in C</p>
 
-    <main id="main" aria-describedby="intro" class="content">
-      <section class="block" id="intro">
-        <h2>Live Demo</h2>
-        <p>Advanced features: pipes, redirections, and built-in commands.</p>
-        <div class="demo-placeholder" role="region" aria-label="terminal demo">
-          <div class="terminal-content">
+    <section class="section">
+      <h2>Live Demo</h2>
+      <p>Advanced shell features: pipes, redirections, and built-in commands.</p>
+      <div class="terminal">
+        <div class="terminal-content">
+          <div><span class="prompt">minishell&gt;</span> <span class="command">echo "Welcome to my custom shell!"</span></div>
+          <div class="output">Welcome to my custom shell!</div>
+          <br>
+          <div><span class="prompt">minishell&gt;</span> <span class="command">export DEMO="Built from scratch in C"</span></div>
+          <div><span class="prompt">minishell&gt;</span> <span class="command">echo "This shell was: $DEMO"</span></div>
+          <div class="output">This shell was: Built from scratch in C</div>
+          <br>
+          <div><span class="prompt">minishell&gt;</span> <span class="command">ls | wc -l</span></div>
+          <div class="output">21</div>
+          <br>
+          <div><span class="prompt">minishell&gt;</span> <span class="command">ls -la | grep "^d" | wc -l</span></div>
+          <div class="output">3</div>
+          <br>
+          <div><span class="prompt">minishell&gt;</span> <span class="command">cat file.txt | sort | uniq | wc -l</span></div>
+          <div class="output">42</div>
+          <br>
+          <div><span class="prompt">minishell&gt;</span> <span class="command">echo "Complex pipeline test" > test.txt</span></div>
+          <div><span class="prompt">minishell&gt;</span> <span class="command">cat test.txt</span></div>
+          <div class="output">Complex pipeline test</div>
+          <br>
+          <div><span class="prompt">minishell&gt;</span> <span class="command">cd /tmp && pwd && cd - > /dev/null && pwd</span></div>
+          <div class="output">/tmp</div>
+          <div class="output">/home/mmiilpal/minishell</div>
+        </div>
+      </div>
+      <p class="demo-note">GIF demo coming soon — recorded at home!</p>
+    </section>
+
+    <section class="section">
+      <h2>Features</h2>
+      <div class="features">
+        <div class="feature">
+          <h3>🔧 Systems Programming</h3>
+          <p>Unix process model, system calls, signals, and file descriptors (fork/exec, dup2, wait, etc.).</p>
+        </div>
+        <div class="feature">
+          <h3>⚡ Advanced Parsing</h3>
+          <p>Custom lexer + parser handling quotes, variable expansion, operators, and precedence.</p>
+        </div>
+        <div class="feature">
+          <h3>🚀 Built-in Commands</h3>
+          <p><code>cd</code>, <code>echo</code>, <code>pwd</code>, <code>export</code>, <code>unset</code>, <code>env</code>, <code>exit</code> with robust error handling.</p>
+        </div>
+        <div class="feature">
+          <h3>🔗 Pipes & Redirections</h3>
+          <p>Complex pipelines with multiple commands; <code>&lt;</code>, <code>&gt;</code>, <code>&gt;&gt;</code>, and here-docs <code>&lt;&lt;</code>.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Technical Implementation</h2>
+      <div class="tech-list">
+        <div class="tech-item">
+          <h4>Languages & Tools</h4>
+          <p>C, Makefile, Git, Valgrind, GNU Readline</p>
+        </div>
+        <div class="tech-item">
+          <h4>Architecture</h4>
+          <p>Modular layers: lexing → parsing → execution</p>
+        </div>
+        <div class="tech-item">
+          <h4>Code Quality</h4>
+          <p>Zero memory leaks; comprehensive error paths</p>
+        </div>
+        <div class="tech-item">
+          <h4>Key Features</h4>
+          <p>Signals, env vars, history, complex pipelines</p>
+        </div>
+      </div>
+
+      <h3 style="margin-top: 2rem; color: var(--accent); font-family: 'Pirata One', cursive;">Project Scope</h3>
+      <ul>
+        <li><strong>Process Management:</strong> fork, exec, wait, signals</li>
+        <li><strong>File Operations:</strong> file descriptors, pipes, redirections</li>
+        <li><strong>Memory Management:</strong> dynamic allocation, leak prevention</li>
+        <li><strong>String Processing:</strong> parsing, tokenization, expansion</li>
+        <li><strong>Error Handling:</strong> robust detection & recovery</li>
+      </ul>
+    </section>
+
+    <div class="center">
+      <a class="btn" href="https://github.com/murairam/miniminishell" target="_blank" rel="noopener">View Source on GitHub →</a>
+    </div>
+  </main>
+
+  <footer>made by Mari in Paris 2025</footer>
+</body>
+</html><div class="terminal-content">
             <div><span class="prompt">minishell&gt;</span> <span class="command">echo "Welcome to my custom shell!"</span></div>
             <div class="output">Welcome to my custom shell!</div>
             <br>
@@ -213,33 +309,36 @@
             <div class="output">3</div>
           </div>
         </div>
-        <p class="center" style="font-style:italic;color:var(--muted)">GIF demo coming soon.</p>
+        <p class="demo-note">GIF demo coming soon — recorded at home!</p>
       </section>
 
-      <section class="features" aria-label="Highlights">
-        <article class="feature-card">
-          <h3>🔧 Systems Programming</h3>
-          <p>Unix process model, system calls, signals, and file descriptors (fork/exec, dup2, wait, etc.).</p>
-        </article>
-        <article class="feature-card">
-          <h3>⚡ Advanced Parsing</h3>
-          <p>Custom lexer + parser handling quotes, variable expansion, operators, and precedence.</p>
-        </article>
-        <article class="feature-card">
-          <h3>🚀 Built-in Commands</h3>
-          <p><code>cd</code>, <code>echo</code>, <code>pwd</code>, <code>export</code>, <code>unset</code>, <code>env</code>, <code>exit</code> with robust errors.</p>
-        </article>
-        <article class="feature-card">
-          <h3>🔗 Pipes &amp; Redirections</h3>
-          <p>Pipelines with multiple commands; <code>&lt;</code>, <code>&gt;</code>, <code>&gt;&gt;</code>, and here-docs <code>&lt;&lt;</code>.</p>
-        </article>
+      <section class="section">
+        <h2>Features</h2>
+        <div class="features">
+          <div class="feature">
+            <h3>🔧 Systems Programming</h3>
+            <p>Unix process model, system calls, signals, and file descriptors (fork/exec, dup2, wait, etc.).</p>
+          </div>
+          <div class="feature">
+            <h3>⚡ Advanced Parsing</h3>
+            <p>Custom lexer + parser handling quotes, variable expansion, operators, and precedence.</p>
+          </div>
+          <div class="feature">
+            <h3>🚀 Built-in Commands</h3>
+            <p><code>cd</code>, <code>echo</code>, <code>pwd</code>, <code>export</code>, <code>unset</code>, <code>env</code>, <code>exit</code> with robust error handling.</p>
+          </div>
+          <div class="feature">
+            <h3>🔗 Pipes & Redirections</h3>
+            <p>Complex pipelines with multiple commands; <code>&lt;</code>, <code>&gt;</code>, <code>&gt;&gt;</code>, and here-docs <code>&lt;&lt;</code>.</p>
+          </div>
+        </div>
       </section>
 
-      <section class="block">
+      <section class="section">
         <h2>Technical Implementation</h2>
-        <div class="tech-grid">
+        <div class="tech-list">
           <div class="tech-item">
-            <h4>Languages &amp; Tools</h4>
+            <h4>Languages & Tools</h4>
             <p>C, Makefile, Git, Valgrind, GNU Readline</p>
           </div>
           <div class="tech-item">
@@ -256,23 +355,23 @@
           </div>
         </div>
 
-        <h3>Project Scope</h3>
-        <ul style="margin: 12px 0 0 22px;">
+        <h3 style="margin-top: 2rem; color: var(--accent); font-family: 'Pirata One', cursive;">Project Scope</h3>
+        <ul>
           <li><strong>Process Management:</strong> fork, exec, wait, signals</li>
-          <li><strong>File Operations:</strong> FDs, pipes, redirections</li>
-          <li><strong>Memory:</strong> dynamic allocation, leak prevention</li>
-          <li><strong>Strings:</strong> parsing, tokenization, expansion</li>
-          <li><strong>Errors:</strong> robust detection &amp; recovery</li>
+          <li><strong>File Operations:</strong> file descriptors, pipes, redirections</li>
+          <li><strong>Memory Management:</strong> dynamic allocation, leak prevention</li>
+          <li><strong>String Processing:</strong> parsing, tokenization, expansion</li>
+          <li><strong>Error Handling:</strong> robust detection & recovery</li>
         </ul>
       </section>
 
-      <p class="center">
-        <a class="btn" href="https://github.com/murairam/minishell" target="_blank" rel="noopener">View Source on GitHub →</a>
-      </p>
+      <div class="center">
+        <a class="btn" href="https://github.com/murairam/miniminishell" target="_blank" rel="noopener">View Source on GitHub →</a>
+      </div>
     </main>
 
     <footer>
-      Built by Mari Miilpalu • <a href="mailto:hello@iram.ee">hello@iram.ee</a>
+      made by Mari in Paris 2025
     </footer>
   </div>
 </body>

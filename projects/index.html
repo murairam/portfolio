@@ -5,26 +5,108 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>projects — iram.ee</title>
   <link rel="canonical" href="https://iram.ee/projects/" />
-  <link rel="stylesheet" href="/assets/style.css" />
+  
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Pirata+One&display=swap" rel="stylesheet">
+  
+  <style>
+    :root{
+      --bg:#111418; --bg2:#1a1f25; --text:#e9eef3; --muted:#9aa6b2; --accent:#ffc9e0;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{color-scheme:dark}
+    body{
+      min-height:100dvh;
+      display:grid; grid-template-rows:auto 1fr auto;
+      background: radial-gradient(1200px circle at 50% -200px, var(--bg2), var(--bg));
+      color:var(--text);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    }
+    /* remove outlines */
+    *:focus{ outline: none !important; }
+
+    nav {
+      padding: 2rem 1.25rem 0;
+      color: var(--muted);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Courier New", monospace;
+    }
+    nav a { 
+      color: var(--muted); 
+      text-decoration: none; 
+    }
+    nav a:hover { 
+      color: var(--accent); 
+    }
+
+    main{ 
+      display:grid; 
+      place-items:center; 
+      padding:2rem 1.25rem; 
+      text-align:center; 
+    }
+    
+    h1{
+      font-family: 'Pirata One', cursive;
+      font-size:clamp(2.8rem, 8vw, 6rem);
+      font-weight:700;
+      letter-spacing:.3px;
+      margin-bottom: 3rem;
+    }
+
+    .project {
+      margin-bottom: 2rem;
+    }
+
+    .project h2 {
+      font-family: 'Pirata One', cursive;
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+      color: var(--accent);
+    }
+
+    .project p {
+      color: var(--muted);
+      margin-bottom: 1rem;
+      max-width: 500px;
+    }
+
+    .project a {
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .project a:hover {
+      color: var(--accent);
+    }
+
+    .coming-soon {
+      color: var(--muted);
+      font-style: italic;
+      margin-top: 2rem;
+    }
+
+    footer{ text-align:center; padding:24px; color:var(--muted); }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <header class="header">
-      <h1>projects</h1>
-      <p class="lead"><a href="/">← back home</a></p>
-    </header>
+  <nav><a href="/">home</a> → projects</nav>
+  
+  <main>
+    <h1>projects</h1>
+    
+    <div class="project">
+      <h2>Minishell</h2>
+      <p>Custom Unix shell implementation in C with pipes, redirections, built-ins, and signal handling.</p>
+      <a href="/projects/minishell/">explore →</a>
+    </div>
+    
+    <div class="coming-soon">
+      more projects coming soon...
+    </div>
+  </main>
 
-    <section class="section grid">
-      <article class="card">
-        <h3>Minishell</h3>
-        <p>Custom Unix shell in C.</p>
-        <p><a class="btn" href="/projects/minishell/">open →</a></p>
-      </article>
-      <!-- future projects appear as more cards -->
-    </section>
-  </div>
+  <footer>made by Mari in Paris 2025</footer>
 </body>
 </html>
